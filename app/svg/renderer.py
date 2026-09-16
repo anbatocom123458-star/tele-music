@@ -57,10 +57,11 @@ def render_scene_svg(scene: Scene) -> str:
                 f'rx="{_fmt(el.get("rx", 50))}" ry="{_fmt(el.get("ry", 30))}"{common}/>'
             )
         elif etype == "line":
+            line_stroke = ' stroke="#333333" stroke-width="2"'
             body = (
                 f'<line x1="{_fmt(el.get("x1", 0))}" y1="{_fmt(el.get("y1", 0))}" '
                 f'x2="{_fmt(el.get("x2", 100))}" y2="{_fmt(el.get("y2", 100))}"'
-                f'{common or " stroke=\"#333333\" stroke-width=\"2\""} />'
+                f"{common or line_stroke} />"
             )
         elif etype in ("polyline", "polygon"):
             pts = " ".join(f"{_fmt(px)},{_fmt(py)}" for px, py in el.get("points", []))
@@ -69,12 +70,14 @@ def render_scene_svg(scene: Scene) -> str:
                 common += ' fill="none"'
             body = f'<{tag} points="{pts}"{common}/>'
         elif etype == "path":
-            body = f'<path d="{escape(el.get("d", ""))}"{common or " fill=\"none\" stroke=\"#333333\""}/>'
+            path_common = common or ' fill="none" stroke="#333333"'
+            body = f'<path d="{escape(el.get("d", ""))}"{path_common}/>'
         elif etype == "text":
             font = _fmt(el.get("font_size", 24))
+            text_common = common or ' fill="#222222"'
             body = (
                 f'<text x="{_fmt(el.get("x", 0))}" y="{_fmt(el.get("y", 0))}" '
-                f'font-family="sans-serif" font-size="{font}"{common or " fill=\"#222222\""}>'
+                f'font-family="sans-serif" font-size="{font}"{text_common}>'
                 f'{escape(str(el.get("text", "")))}</text>'
             )
         else:  # unreachable — validated upstream
