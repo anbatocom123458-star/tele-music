@@ -1,0 +1,17 @@
+.git
+.github
+.venv/
+.venv312/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+models/
+data/
+docs/
+tests/
+scripts/
+.env
+.env.*
+!.env.example
